@@ -19,7 +19,6 @@ information on how to use the **pdf-tool** program .
 <br />
 
 **Hash-package** : **md5sum(28b20c745a966a36bdd9fc1efbd6b36c)**
-
 **Codename** : **fatima**
 
 <br />
