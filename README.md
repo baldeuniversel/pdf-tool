@@ -1,5 +1,5 @@
 # pdf-tool
----
+
 
 ## For the GNU/Linux system
 
