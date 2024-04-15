@@ -1,7 +1,6 @@
 # pdf-tool
 
-
-## For the GNU/Linux system
+### For the GNU/Linux system
 
 The **pdf-tool** program allows to manipulate pdf files .
 
