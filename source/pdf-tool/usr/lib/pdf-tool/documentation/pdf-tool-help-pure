@@ -1,0 +1,119 @@
+
+OPTIONS
+        --extract         type(string) // This option allows to initialize an extraction action
+                              Ex : pdf-tool --extract --input <pdf-file.pdf> --from 1 --to 2
+                                                                      --output <new-pdf.pdf>
+
+        --number          type(string) // This option allows to initialize a page numbering action
+                                                                                    (the foot page)
+                              Ex : pdf-tool --number --input <pdf-file.pdf> --output <new-pdf.pdf>
+
+        --concat          type(string) // This option allows to initialize a concatenating action
+                              Ex : pdf-tool --concat --input <pdf-file1.pdf> <pdf-file2.pdf>
+                                                     --output <new-pdf.pdf>
+                              ( Output rank -> first entry , then the second one ... )
+
+        --compress        type(string) // This option allows to initialize a compression action
+                              Ex : pdf-tool --compress --input <pdf-file1.pdf> --level 4
+                                                       --output <new-pdf.pdf>
+                              (  The max level is 4, the min level is 1  )
+
+        --rotate          type(string) // This option allows to initialize a rotation action
+                              Ex : pdf-tool --rotate --input <pdf-file1.pdf> --cardinal east
+                                                     --output <new-pdf.pdf>
+                              (  north, south,  east, west  are the possible values for the
+                                 --cardinal  option, of course one value at once  )
+
+        --include         type(string) // This option allows to initialize an including action
+                              Ex : pdf-tool --include --source <pdf-file1.pdf>
+                                                      --destination <pdf-file2.pdf>
+                                                      --after-page 2
+                                                      --output <new-pdf.pdf>
+                              ( The source pdf file will be included in that of the destination )
+
+        --exclude         type(string) // This option allows to initialize an excluding action
+                              Ex : pdf-tool --exclude --input <pdf-file1.pdf> --from 3 --to 5
+                                                      --output <new-pdf.pdf>
+                              ( The value of the  --to  option has always to be greater
+                                than the  --from  option one )
+
+        --stamp           type(string) // This option allows to initialize a stamping action
+                              Ex : pdf-tool --stamp --input <pdf-file1.pdf>
+                                                    --scope confidential
+                                                    --output <new-pdf.pdf>
+                              ( One value for the option `  --input  ` , for the `  --scope  `
+                                option there are four possible values :  confidential ,
+                                classified , unclassified , secret , top-secret  )
+
+        --burst           type(string) // This option allows to initialize a bursting action
+                              Ex : pdf-tool --burst --input <pdf-file1.pdf>
+                                                    --output <new-template-name.pdf>
+                              ( One value for the option `  --input  ` . This action will extract
+                                by copying all the pages of the input  pdf file  )
+
+        --encrypt         type(string) // This option allows to initialize an encryption action
+                                          via a  pdf file
+                              Ex : pdf-tool --encrypt --input <pdf-file.pdf>
+                                            --output <new-pdf-encrypted.pdf>
+                              ( an encrypted pdf file will be generated if there is no error )
+
+        --decrypt         type(string) // This option allows to initialize a decryption action
+                                          via a  pdf file
+                              Ex : pdf-tool --decrypt --input <pdf-file.pdf>
+                                            --output <new-pdf-decrypted.pdf>
+                              ( a decrypted pdf file will be generated if there is no error )
+
+                          \
+
+                          \
+
+        --input  ,  -i    type(string) // This option allows to pass the target pdf files .
+                                          Except the  --concat  action, when the  --input  option is called ,
+                                          only one entry (value) is required for the  --input  option
+
+        --from , -f       type(int) // This option allows to indicate from which page number
+                              of the pdf file an action will affect ( the given value after
+                              the  --from  option has to be a positive integer [ i > 0 : i in
+                              natural integers ] )
+
+        --to , -t         type(int) // This option marks the stopping page number for a given action
+                              on a  pdf file  . The [  --from , --to  ] options go together ( the given
+                              value after the  --to  option has to be a positive integer )
+
+        --source , -s     type(string) // This option allows to pass the source  pdf file  ,
+                                          the file that will be included
+
+        --destination , -d 
+                          type(string) // This option allows to pass the destination  pdf file  ,
+                                          the file that will receive the source one
+
+        --level , -l      type(int) // This option allows to define the compression level on
+                                       a  pdf file  . The value for the  --level  option has to be
+                                       a positive integer (  i in integers : 0 < i < 5  ) .
+                                       More the  i  value increases, more the file size of the
+                                       pdf file  becomes small ( in general )
+
+        --after-page , -a type(int) // This option allows to indicate from which page of the
+                               recipient  pdf file  an inclusion will be made ( the value has to be
+                               a positive integer )
+
+        --cardinal , -c   type(string) // This option allows to determine on which cardinal point a
+                               rotation will take place . The possible values are [  north , south ,
+                               east , west  ] , of course one value at once
+
+        --scope , -s      type(string) // This option allows to put in the background a tampon determining
+                               the sensitivity level of a  pdf file  . The possible values are [  confidential ,
+                               classified , unclassified , secret , top-secret  ]
+                                                  ( of course one value at once )
+
+        --output , -o     type(string) // This option allows to give a name for the output  pdf file
+
+        --doc             type(string) // To see the documentation of the  pdf-tool  program
+                              Ex : pdf-tool --doc
+
+        --help            type(sting) // To get help
+                              Ex : pdf-tool --help
+
+        --version         type(sting) // To see the version of the program
+                              Ex : pdf-tool --version
+

@@ -1,0 +1,11 @@
+Package: pdf-tool
+Version: 1.0.1
+Section: base   
+Priority: optional
+Architecture: all
+Maintainer: Baldé <baldeuniversel@protonmail.com>
+Depends: bash, coreutils, texlive, software-properties-common, bc, awk, gawk, zsh,
+         util-linux, pdftk, ghostscript, texlive-latex-extra, poppler-utils
+Description: The <<pdf-tool>> program allows to manipulate pdf files (extracting, concatenating, 
+             numbering , encryption, decryption, stamping, rotation, bursting, including, excluding ...) .
+             Once the package is installed, you can use the alias <<pdftool>> instead of <<pdf-tool>>. 

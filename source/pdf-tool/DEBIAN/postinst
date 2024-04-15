@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+
+#####
+# postinst script
+####
+
+set -uo pipefail
+
+
+# Creation symbolic link : pdf-tool -> pdftool
+ln -rs /usr/bin/pdf-tool /usr/bin/pdftool 2> /dev/null
+
+# Just to print the name of the author
+echo ""
+echo ""
+echo "~"
+
+tput setaf 6; tput bold; echo "By Baldé ~" `tput sgr0` 2> /dev/null

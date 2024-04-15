@@ -1,0 +1,119 @@
+
+[1;37mOPTIONS[0m
+        [1;36m--extract[0m         type(string) // This option allows to initialize an extraction action
+                              Ex : [1;35mpdf-tool[0m [1;36m--extract[0m [1;32m--input[0m <pdf-file.pdf> [1;32m--from[0m 1 [1;32m--to[0m 2
+                                                                      [1;32m--output[0m <new-pdf.pdf>
+
+        [1;36m--number[0m          type(string) // This option allows to initialize a page numbering action
+                                                                                    (the foot page)
+                              Ex : [1;35mpdf-tool[0m [1;36m--number[0m [1;32m--input[0m <pdf-file.pdf> [1;32m--output[0m <new-pdf.pdf>
+
+        [1;36m--concat[0m          type(string) // This option allows to initialize a concatenating action
+                              Ex : [1;35mpdf-tool[0m [1;36m--concat[0m [1;32m--input[0m <pdf-file1.pdf> <pdf-file2.pdf>
+                                                     [1;32m--output[0m <new-pdf.pdf>
+                              ( Output rank -> first entry , then the second one ... )
+
+        [1;36m--compress[0m        type(string) // This option allows to initialize a compression action
+                              Ex : [1;35mpdf-tool[0m [1;36m--compress[0m [1;32m--input[0m <pdf-file1.pdf> [1;32m--level[0m 4
+                                                       [1;32m--output[0m <new-pdf.pdf>
+                              (  The max level is 4, the min level is 1  )
+
+        [1;36m--rotate[0m          type(string) // This option allows to initialize a rotation action
+                              Ex : [1;35mpdf-tool[0m [1;36m--rotate[0m [1;32m--input[0m <pdf-file1.pdf> [1;32m--cardinal[0m east
+                                                     [1;32m--output[0m <new-pdf.pdf>
+                              (  north, south,  east, west  are the possible values for the
+                                 [1;32m--cardinal[0m  option, of course one value at once  )
+
+        [1;36m--include[0m         type(string) // This option allows to initialize an including action
+                              Ex : [1;35mpdf-tool[0m [1;36m--include[0m [1;32m--source[0m <pdf-file1.pdf>
+                                                      [1;32m--destination[0m <pdf-file2.pdf>
+                                                      [1;32m--after-page[0m 2
+                                                      [1;32m--output[0m <new-pdf.pdf>
+                              ( The source pdf file will be included in that of the destination )
+
+        [1;36m--exclude[0m         type(string) // This option allows to initialize an excluding action
+                              Ex : [1;35mpdf-tool[0m [1;36m--exclude[0m [1;32m--input[0m <pdf-file1.pdf> [1;32m--from[0m 3 [1;32m--to[0m 5
+                                                      [1;32m--output[0m <new-pdf.pdf>
+                              ( The value of the  [1;32m--to[0m  option has always to be greater
+                                than the  [1;32m--from[0m  option one )
+
+        [1;36m--stamp[0m           type(string) // This option allows to initialize a stamping action
+                              Ex : [1;35mpdf-tool[0m [1;36m--stamp[0m [1;32m--input[0m <pdf-file1.pdf>
+                                                    [1;32m--scope[0m confidential
+                                                    [1;32m--output[0m <new-pdf.pdf>
+                              ( One value for the option `  [1;32m--input[0m  ` , for the `  [1;32m--scope[0m  `
+                                option there are four possible values :  confidential ,
+                                classified , unclassified , secret , top-secret  )
+
+        [1;36m--burst[0m           type(string) // This option allows to initialize a bursting action
+                              Ex : [1;35mpdf-tool[0m [1;36m--burst[0m [1;32m--input[0m <pdf-file1.pdf>
+                                                    [1;32m--output[0m <new-template-name.pdf>
+                              ( One value for the option `  [1;32m--input[0m  ` . This action will extract
+                                by copying all the pages of the input  pdf file  )
+
+        [1;36m--encrypt[0m         type(string) // This option allows to initialize an encryption action
+                                          via a  pdf file
+                              Ex : [1;35mpdf-tool[0m [1;36m--encrypt[0m [1;32m--input[0m <pdf-file.pdf>
+                                            [1;32m--output[0m <new-pdf-encrypted.pdf>
+                              ( an encrypted pdf file will be generated if there is no error )
+
+        [1;36m--decrypt[0m         type(string) // This option allows to initialize a decryption action
+                                          via a  pdf file
+                              Ex : [1;35mpdf-tool[0m [1;36m--decrypt[0m [1;32m--input[0m <pdf-file.pdf>
+                                            [1;32m--output[0m <new-pdf-decrypted.pdf>
+                              ( a decrypted pdf file will be generated if there is no error )
+
+                          \
+
+                          \
+
+        [1;32m--input[0m  ,  [1;32m-i [0m   type(string) // This option allows to pass the target pdf files .
+                                          Except the  [1;36m--concat[0m  action, when the  [1;32m--input[0m  option is called ,
+                                          only one entry (value) is required for the  [1;32m--input[0m  option
+
+        [1;32m--from[0m , [1;32m-f [0m      type(int) // This option allows to indicate from which page number
+                              of the pdf file an action will affect ( the given value after
+                              the  [1;32m--from[0m  option has to be a positive integer [ i > 0 : i in
+                              natural integers ] )
+
+        [1;32m--to[0m , [1;32m-t [0m        type(int) // This option marks the stopping page number for a given action
+                              on a  pdf file  . The [  [1;32m--from[0m , [1;32m--to[0m  ] options go together ( the given
+                              value after the  [1;32m--to[0m  option has to be a positive integer )
+
+        [1;32m--source[0m , [1;32m-s [0m    type(string) // This option allows to pass the source  pdf file  ,
+                                          the file that will be included
+
+        [1;32m--destination[0m , [1;32m-d [0m
+                          type(string) // This option allows to pass the destination  pdf file  ,
+                                          the file that will receive the source one
+
+        [1;32m--level[0m , [1;32m-l [0m     type(int) // This option allows to define the compression level on
+                                       a  pdf file  . The value for the  [1;32m--level[0m  option has to be
+                                       a positive integer (  i in integers : 0 < i < 5  ) .
+                                       More the  i  value increases, more the file size of the
+                                       pdf file  becomes small ( in general )
+
+        [1;32m--after-page[0m , [1;32m-a [0mtype(int) // This option allows to indicate from which page of the
+                               recipient  pdf file  an inclusion will be made ( the value has to be
+                               a positive integer )
+
+        [1;32m--cardinal[0m , [1;32m-c [0m  type(string) // This option allows to determine on which cardinal point a
+                               rotation will take place . The possible values are [  north , south ,
+                               east , west  ] , of course one value at once
+
+        [1;32m--scope[0m , [1;32m-s [0m     type(string) // This option allows to put in the background a tampon determining
+                               the sensitivity level of a  pdf file  . The possible values are [  confidential ,
+                               classified , unclassified , secret , top-secret  ]
+                                                  ( of course one value at once )
+
+        [1;32m--output[0m , [1;32m-o [0m    type(string) // This option allows to give a name for the output  pdf file
+
+        [1;36m--doc[0m             type(string) // To see the documentation of the  [1;35mpdf-tool[0m  program
+                              Ex : [1;35mpdf-tool[0m [1;36m--doc[0m
+
+        [1;36m--help[0m            type(sting) // To get help
+                              Ex : [1;35mpdf-tool[0m [1;36m--help[0m
+
+        [1;36m--version[0m         type(sting) // To see the version of the program
+                              Ex : [1;35mpdf-tool[0m [1;36m--version[0m
+
