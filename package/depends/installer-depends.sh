@@ -57,8 +57,9 @@ function installer
     ### Action to install dependencies -> start tag[i0]
 
     # Declaration variables
-    declare -a tabDep=("bash" "coreutils" "texlive" "software-properties-common" "bc" \
-        "awk" "gawk" "zsh" "util-linux" "pdftk" "ghostscript" "texlive-latex-extra" "poppler-utils")
+    declare -a tabDep=("bash" "coreutils" "software-properties-common" "bc" "awk" "gawk" "zsh" \
+        "util-linux" "pdftk" "ghostscript" "poppler-utils" "fonts-liberation" \
+        "fonts-dejavu" "imagemagick" "findutils")
  
 
     # Installing dependencies

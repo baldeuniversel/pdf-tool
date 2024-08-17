@@ -667,7 +667,7 @@ function spinnerAnimation
 
 :   '
 /**
-* @overview the `removeTmpWorkingDir` allows to remove the tmp working directory
+* @overview The `removeTmpWorkingDir` allows to remove the tmp working directory
 */
     '
 function removeTmpWorkingDir
@@ -678,6 +678,56 @@ function removeTmpWorkingDir
         #
         rm -rf "$tmpWorkingDir" 2> /dev/null
     fi
+}
+
+
+
+
+
+:   '
+/**
+* @overview The `numberingPDFFile` allows to number a pdf file 
+*
+* @param {string} $1 // The pdf file 
+* @param {string} $2 // Temporary directory 
+*/
+    '
+function numberingPDFFile
+{
+    # Declaration variables
+    local getPDFFile=$1
+    local getTmpDir=$2
+    local numberOfPages=0
+
+
+   
+    #
+    numberOfPages=` pdftk $getPDFFile dump_data | grep NumberOfPages | awk '{print $2}' `
+
+    #
+    if [[ ! -e "$getTmpDir" ]]
+    then
+        mkdir -p "$getTmpDir" 2> /dev/null 
+    fi
+
+
+
+    # Create a svg image with a numbering
+    for counterPage in $(seq 1 $numberOfPages)
+    do
+        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1190\" height=\"1684\">
+            <text x=\"50%\" y=\"98%\" font-family=\"Arial\" font-size=\"20\" fill=\"black\"
+            text-anchor=\"middle\">$counterPage</text> </svg>" > \
+            "$getTmpDir/${counterPage}.svg"
+    done
+
+    #
+    convert ` find "$getTmpDir" -name "*.svg" -type f | xargs ls -v ` \
+        -density 300 -quality 100 "$tmpWorkingDir/background-foot-page.pdf" 
+
+    #
+    pdftk "$getPDFFile" multibackground "$tmpWorkingDir/background-foot-page.pdf" output "$tmpWorkingDir/pdf-numbered-foot-page.pdf"
+
 }
 
 
@@ -1575,13 +1625,17 @@ then
     fi
 
     # Copy the template file towards ...
-    cp "/usr/lib/pdf-tool/library/tex/template-number-foot-page.tex" "$tmpWorkingDir"
+    # cp "/usr/lib/pdf-tool/library/tex/template-number-foot-page.tex" "$tmpWorkingDir"
     
 
     # Use the version `1.5` for the input pdf file
-    gs -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \
-        -sOutputFile="$tmpWorkingDir/$getTheOutputNameFile" "$getThePDFFile" &> /dev/null &
+    # gs -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \
+    #    -sOutputFile="$tmpWorkingDir/$getTheOutputNameFile" "$getThePDFFile" &> /dev/null &
     
+    # Call the function 
+    numberingPDFFile $getThePDFFile $tmpWorkingDir  & #2> "$tmpWorkingDir/number-action" 1> /dev/null &
+
+
     # Call the function
     spinnerAnimation $!
     
@@ -1590,22 +1644,22 @@ then
     tput cuu1
 
     # Replace the text `replaceMe` by the "$tmpWorkingDir/$getTheOutputNameFile" in the text file 
-    sed -i "s|replaceMe|"$tmpWorkingDir/$getTheOutputNameFile"|" "$tmpWorkingDir/template-number-foot-page.tex" 
+    #sed -i "s|replaceMe|"$tmpWorkingDir/$getTheOutputNameFile"|" "$tmpWorkingDir/template-number-foot-page.tex" 
    
     
     # Numbering
-    pdflatex -halt-on-error -output-directory "$tmpWorkingDir" \
-        "$tmpWorkingDir/template-number-foot-page.tex"  2> "$tmpWorkingDir/number-action" 1> /dev/null &
+    #pdflatex -halt-on-error -output-directory "$tmpWorkingDir" \
+    #   "$tmpWorkingDir/template-number-foot-page.tex"  2> "$tmpWorkingDir/number-action" 1> /dev/null &
 
     # Call the function 
-    spinnerAnimation $!
+    #spinnerAnimation $!
     
     #
     if [[  ` cat "$tmpWorkingDir/number-action" 2> /dev/null | wc -l ` -eq 0  ]]
     then
         rm -r "$tmpWorkingDir/$getTheOutputNameFile" 2> /dev/null
         
-        mv "$tmpWorkingDir/template-number-foot-page.pdf" "$getTheOutputNameFile" 2> /dev/null
+        mv "$tmpWorkingDir/pdf-numbered-foot-page.pdf" "$getTheOutputNameFile" 2> /dev/null
 
         #
         if [[ $? -eq 0 ]]
@@ -2441,7 +2495,20 @@ then
     
     # Call the function
     spinnerAnimation $!
-   
+
+    # Check to see if the size of the new compressed file is lower that the input one 
+    if [[ ` du -sb "$tmpWorkingDir/$getTheOutputNameFile" | awk '{print $1}' ` -gt ` du -sb "$getThePDFFile" | awk '{print $1}' ` ]]
+    then
+        #
+        echo "~"
+        echo -e "Compressing ignored, the size of the compressed file is greater than the input one 🧐 "
+
+        # Call the function
+        removeTmpWorkingDir
+
+        exit 0
+    fi 
+
     # Move the compress file towards the output given name 
     mv "$tmpWorkingDir/$getTheOutputNameFile" "$getTheOutputNameFile" 2> "$tmpWorkingDir/move-action"
     
