@@ -1,4 +1,3 @@
-
 # `pdf-tool/pdftool` documentation
 
 ---
