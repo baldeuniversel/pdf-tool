@@ -20,7 +20,7 @@
 
 `pdf-tool` (version 1.0.2) is a versatile Linux command-line utility designed to manipulate PDF files. With `pdf-tool`, you can <br /> 
 perform a wide range of actions such as **compressing**, **rotating**, **numbering**, **concatenating**, **extracting**, **including**, <br />
-**excluding**, **encrypting**, **decrypting**, **bursting**, **stamping** **getting info** ... on PDF files.
+**excluding**, **encrypting**, **decrypting**, **bursting**, **stamping**, **getting info** ... on PDF files.
 
 Once the package is installed, you can use the alias `pdftool` instead of `pdf-tool`.
 
