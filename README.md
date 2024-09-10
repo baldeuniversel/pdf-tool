@@ -18,9 +18,9 @@
 
 ## Overview
 
-`pdf-tool` (version 1.0.1) is a versatile Linux command-line utility designed to manipulate PDF files. With `pdf-tool`, you can <br /> 
+`pdf-tool` (version 1.0.2) is a versatile Linux command-line utility designed to manipulate PDF files. With `pdf-tool`, you can <br /> 
 perform a wide range of actions such as **compressing**, **rotating**, **numbering**, **concatenating**, **extracting**, **including**, <br />
-**excluding**, **encrypting**, **decrypting**, **bursting**, **stamping** ... PDF files.
+**excluding**, **encrypting**, **decrypting**, **bursting**, **stamping** **getting info** ... on PDF files.
 
 Once the package is installed, you can use the alias `pdftool` instead of `pdf-tool`.
 
@@ -33,12 +33,12 @@ To install the PDF file, follow these steps:
 1. **Clone the repository**  <br />
    Run the following command to clone the repository with the specified branch:
    ```bash
-   git clone --depth 1 --branch v1.0.1-electron https://github.com/baldeuniversel/pdf-tool.git
+   git clone --depth 1 --branch v1.0.2-maimouna https://github.com/baldeuniversel/pdf-tool.git
 
 2. **Install the package** <br />
    Once the repository is cloned, install the package using the following command:
    ```bash
-   sudo dpkg --install pdf-tool/package/deb/pdf-tool-1.0.1.deb
+   sudo dpkg --install pdf-tool/package/deb/pdf-tool-1.0.2.deb
 
 3. **Install the dependencies if necessary** (optional/requirement) <br />
    If you use `apt` as package manager
@@ -64,6 +64,7 @@ The following actions are supported by `pdf-tool`:
 - `--burst`
 - `--encrypt`
 - `--decrypt`
+- `--info`
 - `--doc`
 - `--help`
 - `--version`
@@ -187,6 +188,14 @@ Decrypt a PDF file.
 ```sh
 pdf-tool --decrypt --input <pdf-file.pdf> --output <new-pdf-decrypted.pdf>
 ```
+
+### `--info`
+Get some info about an input PDF file.
+
+```sh
+pdf-tool --info --input <pdf-file.pdf>
+```
+
 
 ### `--doc`
 View the documentation.
