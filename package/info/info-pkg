@@ -1,5 +1,5 @@
 {
     package: pdf-tool ,
-    version: 1.0.1 ,
-    pkg-md5sum: 81cf8f304ba38857e9bcaa6575569d63  
+    version: 1.0.2 ,
+    pkg-md5sum: ca1eba7a79ff56dce4bdb961ec442e72  
 }

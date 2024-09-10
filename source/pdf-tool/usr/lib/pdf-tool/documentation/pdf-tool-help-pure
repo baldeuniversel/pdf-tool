@@ -63,6 +63,12 @@ OPTIONS
                                             --output <new-pdf-decrypted.pdf>
                               ( a decrypted pdf file will be generated if there is no error )
 
+        --info            type(string) // This option allows to print some info about an input
+                                          pdf file
+                              Ex : pdf-tool --info --input <pdf-file.pdf>
+
+                              ( One pdf file at once )
+
                           \
 
                           \

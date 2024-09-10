@@ -2,7 +2,7 @@
 * The <<pdf-tool>> program allows to manipulate pdf files .
 *
 * With this program you can do actions like compress, rotate, number, stamp, 
-* concatenate, extract, include, exclude, encrypt, decrypt, burst ... on 
+* concatenate, extract, include, exclude, encrypt, decrypt, burst, info ... on 
 * pdf files (use from the terminal) .
 * Once the package is installed you can use the alias <<pdftool>> instead of 
 * <<pdf-tool>>

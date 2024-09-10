@@ -1,11 +1,11 @@
 [1;37mNAME[0m
-        [1;35mpdf-tool[0m  (version  1.0.1 ) .
+        [1;35mpdf-tool[0m  (version  1.0.2 ) .
 
 [1;37mDESCRIPTION[0m
         [1;35mpdf-tool[0m  is a program allows to manipulate  pdf files  .
         With this program you can do actions like  compress , rotate , number ,
         concatenate , extract , include , exclude , encrypt , decrypt , burst ,
-        stamp ...  on  pdf files  (use from the terminal) .
+        stamp , info ...  on  pdf files  (use from the terminal) .
 
 [1;37mOVERVIEW[0m
         @overview This program allows to execute some actions (see the preconditions below)
@@ -15,8 +15,8 @@
         @requires
         The only actions supported are  [ [1;36m--extract[0m , [1;36m--number[0m , [1;36m--concat[0m , [1;36m--compress[0m ,
                                           [1;36m--rotate[0m , [1;36m--include[0m , [1;36m--exclude[0m , [1;36m--stamp[0m ,
-                                          [1;36m--burst[0m , [1;36m--encrypt[0m , [1;36m--decrypt[0m , [1;36m--doc[0m ,
-                                          [1;36m--help[0m , [1;36m--version[0m ]
+                                          [1;36m--burst[0m , [1;36m--encrypt[0m , [1;36m--decrypt[0m , [1;36m--info[0m 
+                                          [1;36m--doc[0m , [1;36m--help[0m , [1;36m--version[0m ]
 
        && the only options supported are  [ [1;32m--input[0m || [1;32m-i [0m, [1;32m--from[0m || [1;32m-f [0m, [1;32m--to[0m || [1;32m-t [0m, [1;32m--source[0m || [1;32m-s [0m,
                                             [1;32m--destination[0m || [1;32m-d [0m, [1;32m--after-page[0m || [1;32m-a [0m, [1;32m--level[0m || [1;32m-l [0m,
@@ -106,6 +106,12 @@
                               Ex : [1;35mpdf-tool[0m [1;36m--decrypt[0m [1;32m--input[0m <pdf-file.pdf>
                                             [1;32m--output[0m <new-pdf-decrypted.pdf>
                               ( a decrypted pdf file will be generated if there is no error )
+
+        [1;36m--info[0m         type(string) // This option allows to print some info about an input 
+                                       pdf file
+                              Ex : [1;35mpdf-tool[0m [1;36m--info[0m [1;32m--input[0m <pdf-file.pdf>
+                        
+                              ( One pdf file at once )
 
                           \
 

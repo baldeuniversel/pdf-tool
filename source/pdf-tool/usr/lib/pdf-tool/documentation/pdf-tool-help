@@ -63,6 +63,12 @@
                                             [1;32m--output[0m <new-pdf-decrypted.pdf>
                               ( a decrypted pdf file will be generated if there is no error )
 
+        [1;36m--info[0m         type(string) // This option allows to print some info about an input 
+                                       pdf file
+                              Ex : [1;35mpdf-tool[0m [1;36m--info[0m [1;32m--input[0m <pdf-file.pdf>
+                        
+                              ( One pdf file at once )
+
                           \
 
                           \

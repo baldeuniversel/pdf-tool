@@ -6,7 +6,7 @@
 *        pdf‐tool is a program allows to manipulate pdf files .
 *        With this program you can do actions like compress , rotate , number ,
 *        concatenate , extract , include , exclude , encrypt , decrypt , burst ,
-*        stamp ... on pdf files (use from the terminal) .
+*        stamp , info ... on pdf files (use from the terminal) .
 * 
 * OVERVIEW
 *        @overview This program allows to execute some actions (see the preconditions below)
@@ -16,8 +16,8 @@
 *        @requires
 *        The only actions supported are [ ‐‐extract , ‐‐number , ‐‐concat , ‐‐compress ,
 *                                         ‐‐rotate , ‐‐include , ‐‐exclude , ‐‐stamp ,
-*                                         ‐‐burst , ‐‐encrypt , ‐‐decrypt , ‐‐doc ,
-*                                         ‐‐help , ‐‐version ]
+*                                         ‐‐burst , ‐‐encrypt , ‐‐decrypt , --info , 
+*                                         ‐‐doc , ‐‐help , ‐‐version ]
 * 
 *        && the only options supported are [ ‐‐input || ‐i , ‐‐from || ‐f , ‐‐to || ‐t , ‐‐source || ‐s ,
 *                                            ‐‐destination || ‐d , ‐‐after‐page || ‐a , ‐‐level || ‐l ,
@@ -107,6 +107,11 @@
 *                                Ex : pdf‐tool ‐‐decrypt ‐‐input <pdf‐file.pdf>
 *                                              ‐‐output <new‐pdf‐decrypted.pdf>
 *                                ( a decrypted pdf file will be generated if there is no error )
+*
+*        ‐‐info             type(string) // This option allows to print some info about an input 
+*                                           pdf file 
+*                                Ex : pdf‐tool ‐‐info ‐‐input <pdf‐file.pdf>
+*                                ( One input(pdf file) at once )
 * 
 *                           \
 * 
@@ -187,13 +192,44 @@ set -uo pipefail # To exit the script if there is an error
 
 
 
+# Set the locales 
+if [[ ${LANG:-} != "en_US.UTF-8" ]]
+then
+    #
+    if [[ ! ` locale -a | grep -iw -- "en_US.UTF8" ` ]]
+    then
+        echo "~"
+        echo "Missing dependency, you must have the locale [en_US.utf8]"
+
+        exit 1
+    fi
+
+    #
+    if [[ ! ( $? -eq 0 ) ]]
+    then
+        echo "~"
+        echo "Missing dependency, you must install [locales] package"
+
+        exit 1
+    fi
+
+    #
+    export LANG="en_US.UTF-8"
+    export LANGUAGE="en_US.UTF-8"
+    export LC_ALL="en_US.UTF-8"
+    export LC_CTYPE="en_US.UTF-8"
+fi
+
+
+
 # Declaration variables
 listOfOptions=("--input" "-i" "--from" "-f" \
     "--output" "-o" "--source" "-s" "--destination" "-d" \
     "--after-page" "-a" "--level" "-l" "--cardinal" "-c", "--scope")
 
 listOfParamsAction=("--extract" "--number" "--concat" "--compress" "--rotate" \
-    "--include" "--exclude" "--stamp" "--burst" "--encrypt" "--decrypt" "--doc" "--help" "--version")
+    "--include" "--exclude" "--stamp" "--burst" "--encrypt" "--decrypt" \
+    "--info" "--doc" "--help" "--version")
 
 counterOption=0
 
@@ -219,7 +255,7 @@ do
     fi
 
     #
-    if [[ $counterOption -eq 14 ]]
+    if [[ $counterOption -eq 15 ]]
     then
         echo "~"
         echo -e "Unknown `tput setaf 3; tput bold`$1` tput sgr0 ` option \U001F9D0 ."
@@ -734,6 +770,50 @@ function numberingPDFFile
 
 
 
+:   '
+/**
+* @overview The function `getPDFInfo` allows to print some info about an input 
+* pdf file 
+*
+*
+* @param {string} $1 // The pdf file
+*
+*/
+    '
+function getPDFInfo
+{
+    # Declaration variables
+    local getFile="$1"
+
+
+
+    # 
+    if [[ ` pdfinfo "$getFile"  2> /dev/null ` ]]
+    then
+        #
+        echo -e "~"
+
+        pdfinfo "$getFile" | awk -F':' '{print "\033[1;36m" $1 "\033[0m" ":" "\033[35m" $2 "\033[0m"}'
+
+    else
+        #
+        pdfinfo  "$getFile"  2> "$tmpWorkingDir/check-is-encrypted-pdf-file" 1> /dev/null
+
+        #
+        if [[ ` cat "$tmpWorkingDir/check-is-encrypted-pdf-file" 2> /dev/null | grep -w -- "Incorrect password" ` ]]
+        then
+            #
+            echo "~"
+            echo -e "Encrypted pdf file -> \033[1;35m" $getFile "\033[0m  🛡️ 🔐 "
+        fi
+    fi
+}
+
+
+
+
+
+
 ### Creation some necessary directories -> start tag[c0] 
 
 #
@@ -890,7 +970,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -907,7 +987,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -1420,7 +1500,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -1437,7 +1517,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -1811,7 +1891,7 @@ then
                     elif [[ "$flagIsPDF" == "false" ]]
                     then
                         echo "~"
-                        echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                        echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
     
                         exit 1
                     fi
@@ -1828,7 +1908,7 @@ then
                 then
                     #
                     echo "~"
-                    echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                    echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
     
                     exit 1
                 else
@@ -2178,7 +2258,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -2195,7 +2275,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -2658,7 +2738,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -2675,7 +2755,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -3130,7 +3210,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -3147,7 +3227,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -3242,7 +3322,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -3259,7 +3339,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -3713,7 +3793,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -3730,7 +3810,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -4333,7 +4413,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -4350,7 +4430,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -4949,7 +5029,7 @@ then
                 elif [[ "$flagIsPDF" == "false" ]]
                 then
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -4966,7 +5046,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -5306,7 +5386,7 @@ then
                 then
                     echo "$flagIsPDF in false"
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -5323,7 +5403,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -5721,7 +5801,7 @@ then
                 then
                     echo "$flagIsPDF in false"
                     echo "~"
-                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file 🧐 "
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
 
                     exit 1
                 fi
@@ -5738,7 +5818,7 @@ then
             then
                 #
                 echo "~"
-                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist 🧐 "
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
 
                 exit 1
             else
@@ -5999,3 +6079,229 @@ then
 fi
 
 ### Action `decrypt` -> end tag[d0] 
+
+
+
+
+
+### Action `info` -> start tag[if0]
+
+if [[ "$1" == "--info" ]]
+then
+    
+    # Declaration variables
+    flagIsPDF=""
+    argsOption=""
+    #getVersionOfPDFFile=""
+    getThePDFFile=""
+    #getNbPageOfPDFFile=0
+    getTheOutputNameFile=""
+    counterIterParam=1 # Shift the action `--info`
+    counterRequiredOption=0
+
+    declare -A tabInputOptionArgs=()
+    declare -A tabOutputOptionArgs=()
+
+    declare -a tabRequiredOptions=( "--input" )
+    declare -a tabEncodedOptions=()
+
+
+
+    # Save the `IFS` environmental variable
+    saveIFS=$IFS
+
+    # Change the `IFS`
+    IFS=$'\n'
+
+    # Shift `--info` action
+    shift 1
+
+
+    #
+    for inputParam in "$@"
+    do
+        # Check if the current parameter is `--input`, then ...
+        if [[ "$inputParam" == "--input" ]] || [[ "$inputParam" == "-i" ]]
+        then
+
+            # Process to verify if the current option has already been taken, then ...
+            if [[ $counterRequiredOption -gt 0 ]]
+            then
+                # Get the content of the array in string mode
+                getInStringModeOptions=` echo ${tabEncodedOptions[@]} `
+
+                # Call the function
+                flagOptionSpotted=` isOptionRepeat "$getInStringModeOptions" "$inputParam" `
+
+                # Checking ...
+                if [[ "$flagOptionSpotted" == "true" ]]
+                then
+                    #
+                    echo "~"
+                    echo -e "Action not performed due to repetition of \e[1;035m$inputParam\e[0m option 📛 🔰 "
+
+                    exit 1
+                fi
+            fi
+
+
+            # Get the next arguments
+            getNextArgs=` printf '"%s" ' "${@:$counterIterParam}" `
+
+            # Call of function, then ...
+            tabInputOptionArgs["--input"]=` getArgsOption  "$getNextArgs" "$inputParam" `
+
+
+            # For the `--input` option with the `--info` action, only one argument is required
+            if [[ ` echo "${tabInputOptionArgs[@]}" | awk -F " : " '{ print NF }' ` -gt 1  ]]
+            then
+                echo "~"
+                echo -e "For the \e[1;36m--info\e[0m action , the \e[1;035m--input\e[0m option has to have one argument 🧐 "
+
+                exit 1
+            fi
+            #
+            if [[  ` echo "${tabInputOptionArgs[@]}" | awk -F " : " '{ print NF }' ` -lt 1 ]]
+            then
+                echo "~"
+                echo -e "For the \e[1;36m--info\e[0m action , the \e[1;035m--input\e[0m option has to have one argument 🧐 "
+
+                exit 1
+            fi
+
+
+            # Get the input
+            getPDFFile=` echo "${tabInputOptionArgs[@]}" | awk '{gsub(/"+/, ""); print }' |  awk '{gsub(/^ | $/, ""); print}' `
+
+            # Check if the given input exists
+            if [[ -e "$getPDFFile" ]] && [[ ! ( -d "$getPDFFile" ) ]]
+            then
+                # Call the functions
+                flagIsPDF=` isPDFFile "$getPDFFile" `
+
+                # Check if the file is a pdf file, then ...
+                if [[ "$flagIsPDF" == "encrypted" ]] || [[ "$flagIsPDF" == "true" ]]
+                then
+                    # Call the functions
+                    #getNbPageOfPDFFile=` getNbPagePDFFile $getPDFFile `
+                    #getVersionOfPDFFile=` getVersionPDFFile $getPDFFile `
+
+                    # Change the flag 
+                    flagIsPDF="true"
+
+                elif [[ "$flagIsPDF" == "false" ]]
+                then
+                    echo "~"
+                    echo -e "This \e[1;031m$getPDFFile\e[0m file does not a pdf file or cannot be read 🧐 "
+
+                    exit 1
+                fi
+
+            elif [[ -d "$getPDFFile" ]] && [[ -e "$getPDFFile" ]]
+            then
+                #
+                echo "~"
+                echo -e "The argument for the \e[1;035m--option\e[0m has to be a pdf file 🧐 "
+
+                exit 1
+
+            elif [[ ! ( -e "$getPDFFile" ) ]]
+            then
+                #
+                echo "~"
+                echo -e "The given pdf file \e[1;031m$getPDFFile\e[0m does not exist or cannot be read 🧐 "
+
+                exit 1
+            else
+                #
+                echo "~"
+                echo -e "Either the encoded file \e[1;031m$getPDFFile\e[0m does not exist or the way the"
+                echo -e "file name is written is not supported 📛 "
+
+                exit 1
+            fi
+
+
+            # Increment the counter
+            counterRequiredOption=$(( counterRequiredOption + 1 ))
+
+            # Append the current option
+            tabEncodedOptions+="--input "
+
+        elif ( [[ "$inputParam" != "--input" ]] || [[ "$inputParam" != "-i" ]] )
+        then
+
+            #
+            if [[ ` echo "$inputParam" | grep -- "^-" ` ]]
+            then
+                echo "~"
+                echo -e "Unknown \e[1;031m$inputParam\e[0m option for the \e[1;36m--info\e[0m action 🧐 "
+
+                exit 1
+            fi
+        fi
+
+
+        # Increment the counter
+        counterIterParam=$(( counterIterParam + 1 ))
+    done
+
+
+    # Restore the `IFS` environmental variable
+    IFS=$saveIFS
+
+
+    # Check to see if the required options was used
+    if [[ $counterRequiredOption -ne 1 ]]
+    then
+        #
+        stringMissingOptions=""
+
+        # From the table required options ...
+        for requiredOption in ${tabRequiredOptions[@]}
+        do
+            # A variable allowing to se if the current required option exists among
+            # the input options parameters (encoded by the user)
+            flagOptionFound="false"
+
+            # From the table encoded options
+            for encodedOptions in ${tabEncodedOptions[@]}
+            do
+                # Check the matching
+                if [[ "$requiredOption" == "$encodedOptions" ]]
+                then
+                    #
+                    flagOptionFound="true"
+                fi
+            done
+
+            # Verify if there is a match ...
+            if [[ "$flagOptionFound" == "false" ]]
+            then
+                # Append this missing option (the current required option)
+                stringMissingOptions+="$requiredOption "
+            fi
+        done
+
+        #
+        echo "~"
+        echo -e "Missing  \e[1;033m$stringMissingOptions\e[0m option(s) 🧐 "
+
+        exit 1
+    fi
+
+
+    #
+    if [[ "$flagIsPDF" == "true" ]]
+    then
+        # Call the function
+        getPDFInfo "$getPDFFile"
+    fi
+
+    #
+    exit 0
+
+fi
+
+### Action `info` -> end tag[if0]
+

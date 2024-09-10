@@ -59,7 +59,7 @@ function installer
     # Declaration variables
     declare -a tabDep=("bash" "coreutils" "software-properties-common" "bc" "awk" "gawk" "zsh" \
         "util-linux" "pdftk" "ghostscript" "poppler-utils" "fonts-liberation" \
-        "fonts-dejavu" "imagemagick" "findutils")
+        "fonts-dejavu" "imagemagick" "findutils" "locales")
  
 
     # Installing dependencies

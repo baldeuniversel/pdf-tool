@@ -1,11 +1,11 @@
 NAME
-        pdf-tool  (version  1.0.1 ) .
+        pdf-tool  (version  1.0.2 ) .
 
 DESCRIPTION
         pdf-tool  is a program allows to manipulate  pdf files  .
         With this program you can do actions like  compress , rotate , number ,
         concatenate , extract , include , exclude , encrypt , decrypt , burst ,
-        stamp ...  on  pdf files  (use from the terminal) .
+        stamp , info ...  on  pdf files  (use from the terminal) .
 
 OVERVIEW
         @overview This program allows to execute some actions (see the preconditions below)
@@ -15,8 +15,8 @@ REQUIRES
         @requires
         The only actions supported are  [ --extract , --number , --concat , --compress ,
                                           --rotate , --include , --exclude , --stamp ,
-                                          --burst , --encrypt , --decrypt , --doc ,
-                                          --help , --version ]
+                                          --burst , --encrypt , --decrypt , --info, 
+                                          --doc , --help , --version ]
 
        && the only options supported are  [ --input || -i , --from || -f , --to || -t , --source || -s ,
                                             --destination || -d , --after-page || -a , --level || -l ,
@@ -106,6 +106,12 @@ OPTIONS
                               Ex : pdf-tool --decrypt --input <pdf-file.pdf>
                                             --output <new-pdf-decrypted.pdf>
                               ( a decrypted pdf file will be generated if there is no error )
+
+        --info            type(string) // This option allows to print some info about an input
+                                          pdf file
+                              Ex : pdf-tool --info --input <pdf-file.pdf>
+
+                              ( One pdf file at once )
 
                           \
 
